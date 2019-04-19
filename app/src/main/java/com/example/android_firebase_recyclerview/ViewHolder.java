@@ -44,7 +44,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         //set data to views
         mTitleTv.setText(title);
         mDetailTv.setText(description);
-        Picasso.get().load(image).into(mImageIv);
+        Picasso.with(ctx).load(image).into(mImageIv);
     }
 
     private ViewHolder.ClickListener mClickListener;

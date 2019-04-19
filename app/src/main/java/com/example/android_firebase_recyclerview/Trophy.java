@@ -1,11 +1,11 @@
 package com.example.android_firebase_recyclerview;
 
-public class Model {
+public class Trophy {
 
     String title, image, description;
 
     //constructor
-    public Model(){}
+    public Trophy(){}
 
     //getter and setters press Alt+Insert
 

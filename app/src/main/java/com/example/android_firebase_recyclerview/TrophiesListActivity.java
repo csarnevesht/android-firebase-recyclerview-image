@@ -15,6 +15,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -84,23 +86,29 @@ public class TrophiesListActivity extends AppCompatActivity {
         String query = searchText.toLowerCase();
 
         Query firebaseSearchQuery = mRef.orderByChild("search").startAt(query).endAt(query + "\uf8ff");
+        System.out.println("query=" + query);
+        FirebaseRecyclerOptions<Trophy> options =
+                new FirebaseRecyclerOptions.Builder<Trophy>()
+                        .setQuery(firebaseSearchQuery, Trophy.class)
+                        .build();
 
-        FirebaseRecyclerAdapter<Model, ViewHolder> firebaseRecyclerAdapter =
-                new FirebaseRecyclerAdapter<Model, ViewHolder>(
-                        Model.class,
-                        R.layout.row,
-                        ViewHolder.class,
-                        firebaseSearchQuery
-                ) {
+        FirebaseRecyclerAdapter<Trophy, ViewHolder> firebaseRecyclerAdapter =
+                new FirebaseRecyclerAdapter<Trophy, ViewHolder>(options) {
+
                     @Override
-                    protected void populateViewHolder(ViewHolder viewHolder, Model model, int position) {
+                    protected void onBindViewHolder(ViewHolder viewHolder, int position, Trophy model) {
                         viewHolder.setDetails(getApplicationContext(), model.getTitle(), model.getDescription(), model.getImage());
                     }
 
                     @Override
                     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-                        ViewHolder viewHolder = super.onCreateViewHolder(parent, viewType);
+                        // Create a new instance of the ViewHolder, in this case we are using a custom
+                        // layout called R.layout.row for each item
+                        View view = LayoutInflater.from(parent.getContext())
+                                .inflate(R.layout.row, parent, false);
+
+                        ViewHolder viewHolder = new ViewHolder(view);
 
                         viewHolder.setOnClickListener(new ViewHolder.ClickListener() {
                             @Override
@@ -148,22 +156,35 @@ public class TrophiesListActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        FirebaseRecyclerAdapter<Model, ViewHolder> firebaseRecyclerAdapter =
-                new FirebaseRecyclerAdapter<Model, ViewHolder>(
-                        Model.class,
-                        R.layout.row,
-                        ViewHolder.class,
-                        mRef
+
+        Query query = FirebaseDatabase.getInstance()
+                .getReference()
+                .child("Data")
+                .limitToLast(50);
+
+        FirebaseRecyclerOptions<Trophy> options =
+                new FirebaseRecyclerOptions.Builder<Trophy>()
+                        .setQuery(query, Trophy.class)
+                        .build();
+
+        FirebaseRecyclerAdapter<Trophy, ViewHolder> firebaseRecyclerAdapter =
+                new FirebaseRecyclerAdapter<Trophy, ViewHolder>(
+                        options
                 ) {
                     @Override
-                    protected void populateViewHolder(ViewHolder viewHolder, Model model, int position) {
+                    protected void onBindViewHolder(ViewHolder viewHolder, int position, Trophy model) {
                         viewHolder.setDetails(getApplicationContext(), model.getTitle(), model.getDescription(), model.getImage());
                     }
 
                     @Override
                     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-                        ViewHolder viewHolder = super.onCreateViewHolder(parent, viewType);
+                        // Create a new instance of the ViewHolder, in this case we are using a custom
+                        // layout called R.layout.row for each item
+                        View view = LayoutInflater.from(parent.getContext())
+                                .inflate(R.layout.row, parent, false);
+
+                        ViewHolder viewHolder = new ViewHolder(view);
 
                         viewHolder.setOnClickListener(new ViewHolder.ClickListener() {
                             @Override
