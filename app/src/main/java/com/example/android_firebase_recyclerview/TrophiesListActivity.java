@@ -3,15 +3,11 @@ package com.example.android_firebase_recyclerview;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -26,7 +22,6 @@ import android.widget.TextView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -59,8 +54,6 @@ public class TrophiesListActivity extends AppCompatActivity {
 
         //set layout as LinearLayout
         mRecyclerView.setLayoutManager(mLayoutManager);
-
-
     }
 
     //search data
@@ -68,9 +61,7 @@ public class TrophiesListActivity extends AppCompatActivity {
 
         //convert string entered in SearchView to lowercase
         String query = searchText.toLowerCase();
-
         Query firebaseSearchQuery = mRef.whereArrayContains("search", query);
-
         FirestoreRecyclerOptions<Model> options = new FirestoreRecyclerOptions.Builder<Model>()
                 .setQuery(firebaseSearchQuery, Model.class)
                 .build();
@@ -102,9 +93,9 @@ public class TrophiesListActivity extends AppCompatActivity {
             }
         };
 
-        adapter.startListening();
         //set adapter to recyclerview
         mRecyclerView.setAdapter(adapter);
+        adapter.startListening();
     }
 
     //load data into recycler view onStart
@@ -129,7 +120,6 @@ public class TrophiesListActivity extends AppCompatActivity {
                         .inflate(R.layout.row, parent, false);
                 ViewHolder viewHolder = new ViewHolder(view);
 
-
                 viewHolder.setOnClickListener(new ViewHolder.ClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
@@ -141,7 +131,6 @@ public class TrophiesListActivity extends AppCompatActivity {
                         //TODO do your own implementaion on long item click
                     }
                 });
-
                 return viewHolder;
             }
 
@@ -151,10 +140,9 @@ public class TrophiesListActivity extends AppCompatActivity {
             }
         };
 
-        adapter.startListening();
         //set adapter to recyclerview
         mRecyclerView.setAdapter(adapter);
-
+        adapter.startListening();
     }
 
     public void handleItemClick(View view, int position) {
