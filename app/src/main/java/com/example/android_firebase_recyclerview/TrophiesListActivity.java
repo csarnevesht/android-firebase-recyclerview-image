@@ -88,9 +88,7 @@ public class TrophiesListActivity extends AppCompatActivity {
         //convert string entered in SearchView to lowercase
         String query = searchText.toLowerCase();
 
-//        Query firebaseSearchQuery = mRef.orderBy("search").startAt(query).endAt(query + "\uf8ff");
-        Query firebaseSearchQuery = mRef
-                .whereArrayContains("search", query);
+        Query firebaseSearchQuery = mRef.whereArrayContains("search", query);
 
         FirestoreRecyclerOptions<Model> options = new FirestoreRecyclerOptions.Builder<Model>()
                 .setQuery(firebaseSearchQuery, Model.class)
