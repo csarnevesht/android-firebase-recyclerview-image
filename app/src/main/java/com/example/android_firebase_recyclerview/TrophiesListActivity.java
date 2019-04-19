@@ -36,8 +36,7 @@ import java.io.ByteArrayOutputStream;
 
 public class TrophiesListActivity extends AppCompatActivity {
 
-    LinearLayoutManager mLayoutManager; //for sorting
-    SharedPreferences mSharedPref; //for saving sort settings
+    LinearLayoutManager mLayoutManager; //for search
     RecyclerView mRecyclerView;
 
     FirebaseFirestore mFirebaseDatabase;
@@ -48,29 +47,11 @@ public class TrophiesListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trophies_list);
 
-        FirebaseApp.initializeApp(this);
-        //send Query to FirebaseDatabase
         // Access a Cloud Firestore instance from your Activity
         mFirebaseDatabase = FirebaseFirestore.getInstance();
         mRef = mFirebaseDatabase.collection("Data");
 
-        //Actionbar
-        ActionBar actionBar = getSupportActionBar();
-        //set title
-        mSharedPref = getSharedPreferences("SortSettings", MODE_PRIVATE);
-        String mSorting = mSharedPref.getString("Sort", "newest"); //where if no settingsis selected newest will be default
-
-        if (mSorting.equals("newest")) {
-            mLayoutManager = new LinearLayoutManager(this);
-            //this will load the items from bottom means newest first
-            mLayoutManager.setReverseLayout(true);
-            mLayoutManager.setStackFromEnd(true);
-        } else if (mSorting.equals("oldest")) {
-            mLayoutManager = new LinearLayoutManager(this);
-            //this will load the items from bottom means oldest first
-            mLayoutManager.setReverseLayout(false);
-            mLayoutManager.setStackFromEnd(false);
-        }
+        mLayoutManager = new LinearLayoutManager(this);
 
         //RecyclerView
         mRecyclerView = findViewById(R.id.recyclerView);
@@ -221,53 +202,4 @@ public class TrophiesListActivity extends AppCompatActivity {
         });
         return super.onCreateOptionsMenu(menu);
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        //handle other action bar item clicks here
-        if (id == R.id.action_sort) {
-            //display alert dialog to choose sorting
-            showSortDialog();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void showSortDialog() {
-        //options to display in dialog
-        String[] sortOptions = {" Newest", " Oldest"};
-        //create alert dialog
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Sort by") //set title
-//                .setIcon(R.drawable.ic_action_sort) //set icon
-                .setItems(sortOptions, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // The 'which' argument contains the index position of the selected item
-                        // 0 means "Newest" and 1 means "oldest"
-                        if (which == 0) {
-                            //sort by newest
-                            //Edit our shared preferences
-                            SharedPreferences.Editor editor = mSharedPref.edit();
-                            editor.putString("Sort", "newest"); //where 'Sort' is key & 'newest' is value
-                            editor.apply(); // apply/save the value in our shared preferences
-                            recreate(); //restart activity to take effect
-                        } else if (which == 1) {
-                            {
-                                //sort by oldest
-                                //Edit our shared preferences
-                                SharedPreferences.Editor editor = mSharedPref.edit();
-                                editor.putString("Sort", "oldest"); //where 'Sort' is key & 'oldest' is value
-                                editor.apply(); // apply/save the value in our shared preferences
-                                recreate(); //restart activity to take effect
-                            }
-                        }
-                    }
-                });
-        builder.show();
-    }
-
 }
