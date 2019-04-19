@@ -30,7 +30,7 @@ import com.google.firebase.database.Query;
 
 import java.io.ByteArrayOutputStream;
 
-public class PostsListActivity extends AppCompatActivity {
+public class TrophiesListActivity extends AppCompatActivity {
 
     LinearLayoutManager mLayoutManager; //for sorting
     SharedPreferences mSharedPref; //for saving sort settings
@@ -41,7 +41,7 @@ public class PostsListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_posts_list);
+        setContentView(R.layout.activity_trophies_list);
 
 
         FirebaseApp.initializeApp(this);
@@ -116,7 +116,7 @@ public class PostsListActivity extends AppCompatActivity {
                                 Bitmap mBitmap = ((BitmapDrawable) mDrawable).getBitmap();
 
                                 //pass this data to new activity
-                                Intent intent = new Intent(view.getContext(), PostDetailActivity.class);
+                                Intent intent = new Intent(view.getContext(), TrophyDetailActivity.class);
                                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                                 mBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                                 byte[] bytes = stream.toByteArray();
@@ -179,7 +179,7 @@ public class PostsListActivity extends AppCompatActivity {
                                 Bitmap mBitmap = ((BitmapDrawable) mDrawable).getBitmap();
 
                                 //pass this data to new activity
-                                Intent intent = new Intent(view.getContext(), PostDetailActivity.class);
+                                Intent intent = new Intent(view.getContext(), TrophyDetailActivity.class);
                                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                                 mBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                                 byte[] bytes = stream.toByteArray();

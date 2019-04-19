@@ -9,7 +9,7 @@
     app:cardElevation="3dp"
     app:cardUseCompatPadding="true"
     app:contentPadding="5dp"
-    tools:context=".PostDetailActivity">
+    tools:context=".TrophyDetailActivity">
 
     <ScrollView
         android:layout_width="match_parent"
