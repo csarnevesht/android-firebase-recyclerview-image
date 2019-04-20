@@ -56,47 +56,6 @@ public class TrophiesListActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
     }
 
-    //search data
-    private void firebaseSearch(String searchText) {
-
-        //convert string entered in SearchView to lowercase
-        String query = searchText.toLowerCase();
-        Query firebaseSearchQuery = mRef.whereArrayContains("search", query);
-        FirestoreRecyclerOptions<Model> options = new FirestoreRecyclerOptions.Builder<Model>()
-                .setQuery(firebaseSearchQuery, Model.class)
-                .build();
-        FirestoreRecyclerAdapter adapter = new FirestoreRecyclerAdapter<Model, ViewHolder>(options) {
-
-            @Override
-            protected void onBindViewHolder(ViewHolder viewHolder, int position, Model model) {
-                viewHolder.setDetails(getApplicationContext(), model.getTitle(), model.getDescription(), model.getImage());
-            }
-
-            @Override
-            public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.row, parent, false);
-                ViewHolder viewHolder = new ViewHolder(view);
-
-                viewHolder.setOnClickListener(new ViewHolder.ClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        handleItemClick(view, position);
-                    }
-
-                    @Override
-                    public void onItemLongClick(View view, int position) {
-                        //TODO do your own implementaion on long item click
-                    }
-                });
-                return viewHolder;
-            }
-        };
-
-        //set adapter to recyclerview
-        mRecyclerView.setAdapter(adapter);
-        adapter.startListening();
-    }
 
     //load data into recycler view onStart
     @Override
@@ -134,10 +93,13 @@ public class TrophiesListActivity extends AppCompatActivity {
                 return viewHolder;
             }
 
+
             @Override
             public void onError(FirebaseFirestoreException e) {
                 Log.e("error", e.getMessage());
             }
+
+
         };
 
         //set adapter to recyclerview
@@ -189,5 +151,47 @@ public class TrophiesListActivity extends AppCompatActivity {
             }
         });
         return super.onCreateOptionsMenu(menu);
+    }
+
+    //search data
+    private void firebaseSearch(String searchText) {
+
+        //convert string entered in SearchView to lowercase
+        String query = searchText.toLowerCase();
+        Query firebaseSearchQuery = mRef.whereArrayContains("search", query);
+        FirestoreRecyclerOptions<Model> options = new FirestoreRecyclerOptions.Builder<Model>()
+                .setQuery(firebaseSearchQuery, Model.class)
+                .build();
+        FirestoreRecyclerAdapter adapter = new FirestoreRecyclerAdapter<Model, ViewHolder>(options) {
+
+            @Override
+            protected void onBindViewHolder(ViewHolder viewHolder, int position, Model model) {
+                viewHolder.setDetails(getApplicationContext(), model.getTitle(), model.getDescription(), model.getImage());
+            }
+
+            @Override
+            public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.row, parent, false);
+                ViewHolder viewHolder = new ViewHolder(view);
+
+                viewHolder.setOnClickListener(new ViewHolder.ClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        handleItemClick(view, position);
+                    }
+
+                    @Override
+                    public void onItemLongClick(View view, int position) {
+                        //TODO do your own implementaion on long item click
+                    }
+                });
+                return viewHolder;
+            }
+        };
+
+        //set adapter to recyclerview
+        mRecyclerView.setAdapter(adapter);
+        adapter.startListening();
     }
 }
