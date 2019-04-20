@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -46,11 +47,13 @@ public class TrophiesListActivity extends AppCompatActivity {
         mFirebaseDatabase = FirebaseFirestore.getInstance();
         mRef = mFirebaseDatabase.collection("Data");
 
-        mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager = new GridLayoutManager(this, 3);
 
         //RecyclerView
         mRecyclerView = findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
+
+
 
         //set layout as LinearLayout
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -76,7 +79,7 @@ public class TrophiesListActivity extends AppCompatActivity {
             public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
                 View view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.row, parent, false);
+                        .inflate(R.layout.trophy_list_item, parent, false);
                 ViewHolder viewHolder = new ViewHolder(view);
 
                 viewHolder.setOnClickListener(new ViewHolder.ClickListener() {
@@ -172,7 +175,7 @@ public class TrophiesListActivity extends AppCompatActivity {
             @Override
             public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                 View view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.row, parent, false);
+                        .inflate(R.layout.trophy_list_item, parent, false);
                 ViewHolder viewHolder = new ViewHolder(view);
 
                 viewHolder.setOnClickListener(new ViewHolder.ClickListener() {

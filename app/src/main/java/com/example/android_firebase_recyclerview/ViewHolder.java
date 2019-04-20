@@ -35,7 +35,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
     }
 
-    //set details to recycler view row
+    //set details to recycler view trophy_list_item
     public void setDetails(Context ctx, String title, String description, String image){
         //Views
         TextView mTitleTv = mView.findViewById(R.id.rTitleTv);
