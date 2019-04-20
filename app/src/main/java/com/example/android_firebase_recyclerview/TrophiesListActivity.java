@@ -96,13 +96,10 @@ public class TrophiesListActivity extends AppCompatActivity {
                 return viewHolder;
             }
 
-
             @Override
             public void onError(FirebaseFirestoreException e) {
                 Log.e("error", e.getMessage());
             }
-
-
         };
 
         //set adapter to recyclerview
@@ -163,7 +160,7 @@ public class TrophiesListActivity extends AppCompatActivity {
         String query = searchText.toLowerCase();
         Query firebaseSearchQuery = mRef.whereArrayContains("search", query);
         FirestoreRecyclerOptions<Model> options = new FirestoreRecyclerOptions.Builder<Model>()
-                .setQuery(firebaseSearchQuery, Model.class)
+                .setQuery(query.isEmpty() ?  mRef : firebaseSearchQuery, Model.class)
                 .build();
         FirestoreRecyclerAdapter adapter = new FirestoreRecyclerAdapter<Model, ViewHolder>(options) {
 
