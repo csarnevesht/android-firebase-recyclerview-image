@@ -34,7 +34,7 @@ import com.mancj.materialsearchbar.MaterialSearchBar;
 
 import java.io.ByteArrayOutputStream;
 
-public class TrophiesListActivity extends AppCompatActivity implements MaterialSearchBar.OnSearchActionListener {
+public class TrophiesListActivity extends AppCompatActivity {
 
     LinearLayoutManager mLayoutManager; //for search
     RecyclerView mRecyclerView;
@@ -59,13 +59,10 @@ public class TrophiesListActivity extends AppCompatActivity implements MaterialS
         mRecyclerView = findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
 
-
-
         //set layout as LinearLayout
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         searchBar = findViewById(R.id.searchBar);
-
 
         searchBar.addTextChangeListener(new TextWatcher() {
             @Override
@@ -75,11 +72,15 @@ public class TrophiesListActivity extends AppCompatActivity implements MaterialS
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 Log.d("LOG_TAG", getClass().getSimpleName() + " text changed " + searchBar.getText());
+                firebaseSearch(searchBar.getText());
+
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-                Log.d("LOG_TAG", getClass().getSimpleName() + " text changed " + searchBar.getText());
+                Log.d("LOG_TAG", getClass().getSimpleName() + " after text changed " + searchBar.getText());
+                firebaseSearch(searchBar.getText());
+
             }
 
         });
@@ -156,48 +157,6 @@ public class TrophiesListActivity extends AppCompatActivity implements MaterialS
         intent.putExtra("title", mTitle); // put title
         intent.putExtra("description", mDesc); //put description
         startActivity(intent); //start activity
-    }
-
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        //inflate the menu; this adds items to the action bar if it present
-//        getMenuInflater().inflate(R.menu.menu, menu);
-//        MenuItem item = menu.findItem(R.id.action_search);
-//        SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                firebaseSearch(query);
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                //Filter as you type
-//                firebaseSearch(newText);
-//                return false;
-//            }
-//        });
-//        return super.onCreateOptionsMenu(menu);
-//    }
-
-
-    @Override
-    public void onSearchStateChanged(boolean enabled) {
-        Log.d("LOG_TAG", getClass().getSimpleName() + " onSearchStateChanged " + searchBar.getText());
-    }
-
-    @Override
-    public void onSearchConfirmed(CharSequence text) {
-        Log.d("LOG_TAG", getClass().getSimpleName() + " onSearchConfirmed " + searchBar.getText());
-
-    }
-
-    @Override
-    public void onButtonClicked(int buttonCode) {
-        Log.d("LOG_TAG", getClass().getSimpleName() + " onButtonClicked " + searchBar.getText());
-
     }
 
 
