@@ -1,17 +1,14 @@
 package com.example.android_firebase_recyclerview;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
+
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,6 +17,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -27,13 +30,16 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
+import com.mancj.materialsearchbar.MaterialSearchBar;
 
 import java.io.ByteArrayOutputStream;
 
-public class TrophiesListActivity extends AppCompatActivity {
+public class TrophiesListActivity extends AppCompatActivity implements MaterialSearchBar.OnSearchActionListener {
 
     LinearLayoutManager mLayoutManager; //for search
     RecyclerView mRecyclerView;
+
+    private MaterialSearchBar searchBar;
 
     FirebaseFirestore mFirebaseDatabase;
     CollectionReference mRef;
@@ -57,6 +63,29 @@ public class TrophiesListActivity extends AppCompatActivity {
 
         //set layout as LinearLayout
         mRecyclerView.setLayoutManager(mLayoutManager);
+
+        searchBar = findViewById(R.id.searchBar);
+
+
+        searchBar.addTextChangeListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                Log.d("LOG_TAG", getClass().getSimpleName() + " text changed " + searchBar.getText());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                Log.d("LOG_TAG", getClass().getSimpleName() + " text changed " + searchBar.getText());
+            }
+
+        });
+
+        searchBar.enableSearch();
+
     }
 
 
@@ -130,28 +159,47 @@ public class TrophiesListActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        //inflate the menu; this adds items to the action bar if it present
-        getMenuInflater().inflate(R.menu.menu, menu);
-        MenuItem item = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                firebaseSearch(query);
-                return false;
-            }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        //inflate the menu; this adds items to the action bar if it present
+//        getMenuInflater().inflate(R.menu.menu, menu);
+//        MenuItem item = menu.findItem(R.id.action_search);
+//        SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                firebaseSearch(query);
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                //Filter as you type
+//                firebaseSearch(newText);
+//                return false;
+//            }
+//        });
+//        return super.onCreateOptionsMenu(menu);
+//    }
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                //Filter as you type
-                firebaseSearch(newText);
-                return false;
-            }
-        });
-        return super.onCreateOptionsMenu(menu);
+
+    @Override
+    public void onSearchStateChanged(boolean enabled) {
+        Log.d("LOG_TAG", getClass().getSimpleName() + " onSearchStateChanged " + searchBar.getText());
     }
+
+    @Override
+    public void onSearchConfirmed(CharSequence text) {
+        Log.d("LOG_TAG", getClass().getSimpleName() + " onSearchConfirmed " + searchBar.getText());
+
+    }
+
+    @Override
+    public void onButtonClicked(int buttonCode) {
+        Log.d("LOG_TAG", getClass().getSimpleName() + " onButtonClicked " + searchBar.getText());
+
+    }
+
 
     //search data
     private void firebaseSearch(String searchText) {
