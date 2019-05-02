@@ -18,7 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:mt_maxSuggestionsCount="10"
-        app:mt_placeholder="@string/app_name"
+        app:mt_placeholder=""
         app:mt_speechMode="false"></com.mancj.materialsearchbar.MaterialSearchBar>
 
 
